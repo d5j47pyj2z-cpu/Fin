@@ -19,7 +19,7 @@ h2{font-size:18px;margin:0 0 12px}.form{display:grid;grid-template-columns:repea
 @media(max-width:550px){.wrap{padding:11px}.top h1{font-size:24px}.cards{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.wide{grid-column:auto}.kpi{grid-template-columns:1fr 1fr}.big{font-size:19px}.result{font-size:21px}}
 </style></head>
 <body><div class="wrap">
-<header class="top"><h1>💰 Mon Budget Financier V4</h1><p>Entre tes chiffres : les calculs se mettent à jour automatiquement.</p></header>
+<header class="top"><h1>💰 Mon Budget Financier V4</h1><p>Entre tes chiffres : les calculs se mettent à jour automatiquement. · V4.1 corrigée</p></header>
 <nav>
 <button class="active" data-v="dashboard">📊 Accueil</button><button data-v="budget">💶 Budget</button><button data-v="simulation">🔮 Simulation</button><button data-v="goals">🎯 Épargne</button><button data-v="debts">💳 Crédits</button><button data-v="data">💾 Sauvegarde</button>
 </nav>
@@ -87,24 +87,48 @@ const uid=()=>Date.now()+Math.random();const monthly=x=>x.freq==="yearly"?x.amou
 function save(){localStorage.setItem(KEY,JSON.stringify(D))}
 function totals(){let i=0,e=0,s=0;D.items.forEach(x=>{let m=monthly(x);if(x.type==="income")i+=m;if(x.type==="expense")e+=m;if(x.type==="saving")s+=m});return{i,e,s,left:i-e-s}}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.v).classList.add("active");render()});
-function addItem(){let n=name.value.trim(),a=+amount.value;if(!n||a<=0)return alert("Indique un nom et un montant.");D.items.push({id:uid(),name:n,type:type.value,amount:a,freq:freq.value,cat:cat.value.trim()});save();name.value=amount.value=cat.value="";render()}
+function addItem(){
+const n=document.getElementById("name").value.trim();
+const a=Number(document.getElementById("amount").value);
+const typ=document.getElementById("type").value;
+const fr=document.getElementById("freq").value;
+const category=document.getElementById("cat").value.trim();
+if(!n||!Number.isFinite(a)||a<=0){alert("Indique un nom et un montant.");return}
+D.items.push({id:uid(),name:n,type:typ,amount:a,freq:fr,cat:category});
+save();
+document.getElementById("name").value="";
+document.getElementById("amount").value="";
+document.getElementById("cat").value="";
+render()
+}
 function delItem(id){D.items=D.items.filter(x=>x.id!==id);save();render()}
 function addGoal(){let n=gn.value.trim(),t=+gt.value,c=+gc.value||0;if(!n||t<=0)return alert("Indique un nom et un objectif.");D.goals.push({id:uid(),name:n,target:t,current:c});save();gn.value=gt.value=gc.value="";render()}
 function delGoal(id){D.goals=D.goals.filter(x=>x.id!==id);save();render()}
 function addDebt(){let n=dn.value.trim(),i=+di.value,r=+dr.value,m=+dm.value||0;if(!n||i<=0)return alert("Indique un nom et un montant initial.");D.debts.push({id:uid(),name:n,initial:i,remain:r,m});save();dn.value=di.value=dr.value=dm.value="";render()}
 function delDebt(id){D.debts=D.debts.filter(x=>x.id!==id);save();render()}
 function render(){
-let t=totals();income.textContent=eur(t.i);expenses.textContent=eur(t.e);saving.textContent=eur(t.s);left.textContent=eur(t.left);rate.textContent=t.i?(t.s/t.i*100).toFixed(1)+" %":"0 %";week.textContent=eur(t.left/4.33);day.textContent=eur(t.left/30.44);annual.textContent=eur(t.e*12);annualSave.textContent=eur(t.s*12);
-status.innerHTML=t.left>=0?`<div class="alert ok">🟢 Ton budget est positif. Il te reste <b>${eur(t.left)}</b> par mois après dépenses et épargne.</div>`:`<div class="alert bad">🔴 Attention : ton budget est négatif de <b>${eur(Math.abs(t.left))}</b> par mois. Il faut réduire les dépenses ou augmenter les revenus.</div>`;
-projection.innerHTML=`<div class="kpi"><div class="box"><div class="label">Dans 3 mois</div><div class="result">${eur(t.left*3)}</div></div><div class="box"><div class="label">Dans 6 mois</div><div class="result">${eur(t.left*6)}</div></div><div class="box"><div class="label">Dans 12 mois</div><div class="result">${eur(t.left*12)}</div></div><div class="box"><div class="label">Épargne à 12 mois</div><div class="result blue">${eur(t.s*12)}</div></div></div>`;
-rows.innerHTML=D.items.length?D.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.cat)}</td><td>${x.type==="income"?"Revenu":x.type==="expense"?"Dépense":"Épargne"}</td><td>${x.freq==="monthly"?"Mensuel":x.freq==="yearly"?"Annuel":"Hebdo"}</td><td>${eur(monthly(x))}</td><td><button class="mini" onclick="delItem(${x.id})">Suppr.</button></td></tr>`).join(""):'<tr><td colspan="6" class="empty">Aucune ligne.</td></tr>';
-goals.innerHTML=D.goals.length?D.goals.map(g=>{let p=Math.min(100,g.current/g.target*100);return `<div class="row"><div style="flex:1"><b>${esc(g.name)}</b><div class="sub">${eur(g.current)} / ${eur(g.target)} · reste ${eur(Math.max(0,g.target-g.current))}</div><div class="progress"><i style="width:${p}%"></i></div><div class="sub">${p.toFixed(0)} %</div></div><button class="mini" onclick="delGoal(${g.id})">Suppr.</button></div>`}).join(""):'<div class="empty">Aucun objectif.</div>';
-debts.innerHTML=D.debts.length?D.debts.map(d=>`<div class="row"><div><b>${esc(d.name)}</b><div class="sub">Initial : ${eur(d.initial)} · Reste : ${eur(d.remain)}${d.m?` · Mensualité : ${eur(d.m)}`:""}</div></div><button class="mini" onclick="delDebt(${d.id})">Suppr.</button></div>`).join(""):'<div class="empty">Aucun crédit.</div>';
-si.value=t.i.toFixed(2);se.value=t.e.toFixed(2);ss.value=t.s.toFixed(2);simulate();chartRender();
+let t=totals();document.getElementById("income").textContent=eur(t.i);
+document.getElementById("expenses").textContent=eur(t.e);
+document.getElementById("saving").textContent=eur(t.s);
+document.getElementById("left").textContent=eur(t.left);
+document.getElementById("rate").textContent=t.i?(t.s/t.i*100).toFixed(1)+" %":"0 %";
+document.getElementById("week").textContent=eur(t.left/4.33);
+document.getElementById("day").textContent=eur(t.left/30.44);
+document.getElementById("annual").textContent=eur(t.e*12);
+document.getElementById("annualSave").textContent=eur(t.s*12);
+document.getElementById("status").innerHTML=t.left>=0?`<div class="alert ok">🟢 Ton budget est positif. Il te reste <b>${eur(t.left)}</b> par mois après dépenses et épargne.</div>`:`<div class="alert bad">🔴 Attention : ton budget est négatif de <b>${eur(Math.abs(t.left))}</b> par mois. Il faut réduire les dépenses ou augmenter les revenus.</div>`;
+document.getElementById("projection").innerHTML=`<div class="kpi"><div class="box"><div class="label">Dans 3 mois</div><div class="result">${eur(t.left*3)}</div></div><div class="box"><div class="label">Dans 6 mois</div><div class="result">${eur(t.left*6)}</div></div><div class="box"><div class="label">Dans 12 mois</div><div class="result">${eur(t.left*12)}</div></div><div class="box"><div class="label">Épargne à 12 mois</div><div class="result blue">${eur(t.s*12)}</div></div></div>`;
+document.getElementById("rows").innerHTML=D.items.length?D.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.cat)}</td><td>${x.type==="income"?"Revenu":x.type==="expense"?"Dépense":"Épargne"}</td><td>${x.freq==="monthly"?"Mensuel":x.freq==="yearly"?"Annuel":"Hebdo"}</td><td>${eur(monthly(x))}</td><td><button class="mini" onclick="delItem(${x.id})">Suppr.</button></td></tr>`).join(""):'<tr><td colspan="6" class="empty">Aucune ligne.</td></tr>';
+document.getElementById("goals").innerHTML=D.goals.length?D.goals.map(g=>{let p=Math.min(100,g.current/g.target*100);return `<div class="row"><div style="flex:1"><b>${esc(g.name)}</b><div class="sub">${eur(g.current)} / ${eur(g.target)} · reste ${eur(Math.max(0,g.target-g.current))}</div><div class="progress"><i style="width:${p}%"></i></div><div class="sub">${p.toFixed(0)} %</div></div><button class="mini" onclick="delGoal(${g.id})">Suppr.</button></div>`}).join(""):'<div class="empty">Aucun objectif.</div>';
+document.getElementById("debts").innerHTML=D.debts.length?D.debts.map(d=>`<div class="row"><div><b>${esc(d.name)}</b><div class="sub">Initial : ${eur(d.initial)} · Reste : ${eur(d.remain)}${d.m?` · Mensualité : ${eur(d.m)}`:""}</div></div><button class="mini" onclick="delDebt(${d.id})">Suppr.</button></div>`).join(""):'<div class="empty">Aucun crédit.</div>';
+document.getElementById("si").value=t.i.toFixed(2);
+document.getElementById("se").value=t.e.toFixed(2);
+document.getElementById("ss").value=t.s.toFixed(2);
+simulate();chartRender();
 }
-[si,se,ss,sm].forEach(x=>x.addEventListener("input",simulate));
-function simulate(){let i=+si.value||0,e=+se.value||0,s=+ss.value||0,m=Math.max(1,+sm.value||12),r=i-e-s;sim.innerHTML=`<div class="kpi"><div class="box"><div class="label">Reste chaque mois</div><div class="result ${r>=0?'green':'red'}">${eur(r)}</div></div><div class="box"><div class="label">Disponible / semaine</div><div class="result">${eur(r/4.33)}</div></div><div class="box"><div class="label">Sur ${m} mois</div><div class="result">${eur(r*m)}</div></div><div class="box"><div class="label">Épargne sur ${m} mois</div><div class="result blue">${eur(s*m)}</div></div></div>`}
-function chartRender(){let m={};D.items.forEach(x=>{let k=x.type==="income"?"i":x.type==="expense"?"e":"s";let now=new Date(),key=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");m[key]??={i:0,e:0,s:0};m[key][k]+=monthly(x)});let keys=Object.keys(m);let max=Math.max(1,...keys.flatMap(k=>Object.values(m[k])));chart.innerHTML=keys.length?keys.map(k=>{let d=m[k],h=v=>Math.max(2,v/max*195);return `<div class="month"><div class="bars"><i class="bar inc" style="height:${h(d.i)}px"></i><i class="bar exp" style="height:${h(d.e)}px"></i><i class="bar sav" style="height:${h(d.s)}px"></i></div><span>${k}</span></div>`}).join(""):'<div class="empty" style="width:100%">Ajoute ton budget pour commencer.</div>'}
+["si","se","ss","sm"].forEach(id=>document.getElementById(id).addEventListener("input",simulate));
+function simulate(){let i=+si.value||0,e=+se.value||0,s=+ss.value||0,m=Math.max(1,+sm.value||12),r=i-e-s;document.getElementById("sim").innerHTML=`<div class="kpi"><div class="box"><div class="label">Reste chaque mois</div><div class="result ${r>=0?'green':'red'}">${eur(r)}</div></div><div class="box"><div class="label">Disponible / semaine</div><div class="result">${eur(r/4.33)}</div></div><div class="box"><div class="label">Sur ${m} mois</div><div class="result">${eur(r*m)}</div></div><div class="box"><div class="label">Épargne sur ${m} mois</div><div class="result blue">${eur(s*m)}</div></div></div>`}
+function chartRender(){let m={};D.items.forEach(x=>{let k=x.type==="income"?"i":x.type==="expense"?"e":"s";let now=new Date(),key=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");m[key]??={i:0,e:0,s:0};m[key][k]+=monthly(x)});let keys=Object.keys(m);let max=Math.max(1,...keys.flatMap(k=>Object.values(m[k])));document.getElementById("chart").innerHTML=keys.length?keys.map(k=>{let d=m[k],h=v=>Math.max(2,v/max*195);return `<div class="month"><div class="bars"><i class="bar inc" style="height:${h(d.i)}px"></i><i class="bar exp" style="height:${h(d.e)}px"></i><i class="bar sav" style="height:${h(d.s)}px"></i></div><span>${k}</span></div>`}).join(""):'<div class="empty" style="width:100%">Ajoute ton budget pour commencer.</div>'}
 function backup(){let b=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="budget-financier-v4.json";a.click()}
 function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.items||!x.goals||!x.debts)throw 0;D=x;save();render();alert("Données restaurées.")}catch{alert("Sauvegarde invalide.")}};r.readAsText(f)}
 function resetAll(){if(confirm("Supprimer toutes les données ?")){D={items:[],goals:[],debts:[]};save();render()}}
