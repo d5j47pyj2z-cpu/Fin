@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08111f"><title>Budget Financier V4</title>
+<style>
+:root{--bg:#08111f;--p:#111d30;--p2:#18263d;--line:#2a3a56;--txt:#f8fafc;--muted:#94a3b8;--g:#22c55e;--r:#ef4444;--b:#38bdf8;--o:#f59e0b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#060e19,#111827);color:var(--txt);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1150px;margin:auto;padding:14px}.top{padding:10px 2px 15px}.top h1{margin:0;font-size:28px}.top p{margin:5px 0;color:var(--muted)}
+nav{display:flex;gap:7px;overflow:auto;margin-bottom:14px}button{border:1px solid var(--line);background:var(--p2);color:var(--txt);padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer;white-space:nowrap}.active,.primary{background:#2563eb;border-color:#2563eb}.danger{background:#7f1d1d;border-color:#991b1b}.view{display:none}.view.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.card,.panel{background:rgba(17,29,48,.98);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:13px}.label{font-size:12px;color:var(--muted)}.big{font-size:22px;font-weight:900;margin-top:5px}.green{color:var(--g)}.red{color:var(--r)}.blue{color:var(--b)}.orange{color:var(--o)}
+h2{font-size:18px;margin:0 0 12px}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.wide{grid-column:span 2}input,select{width:100%;padding:10px;background:#091322;border:1px solid var(--line);border-radius:9px;color:var(--txt)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.box{padding:13px;background:#0b1525;border:1px solid var(--line);border-radius:11px}.result{font-size:25px;font-weight:900;margin-top:5px}.hint{font-size:11px;color:var(--muted);margin-top:4px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:11px 0}.row:last-child{border:0}.sub,.notice{font-size:12px;color:var(--muted)}.notice{padding:11px;border:1px solid var(--line);border-radius:10px;line-height:1.5}.actions{display:flex;gap:7px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:12px}
+.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);font-size:13px;white-space:nowrap}.table th{color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:20px}
+.progress{height:10px;background:#091322;border-radius:20px;overflow:hidden;margin:8px 0}.progress i{display:block;height:100%;background:var(--b)}
+.alert{padding:13px;border-radius:11px;margin-top:10px;font-weight:700}.ok{background:#06351e;color:#86efac;border:1px solid #14532d}.warn{background:#3b2605;color:#fcd34d;border:1px solid #92400e}.bad{background:#3b0a0a;color:#fca5a5;border:1px solid #991b1b}
+.chart{height:250px;display:flex;align-items:flex-end;gap:10px;overflow:auto;padding:10px 5px 25px;border-bottom:1px solid var(--line)}.month{min-width:62px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.bars{height:200px;display:flex;align-items:flex-end;gap:3px}.bar{width:15px;border-radius:4px 4px 0 0;min-height:2px}.inc{background:var(--g)}.exp{background:var(--r)}.sav{background:var(--b)}.month span{font-size:10px;color:var(--muted);margin-top:4px}
+@media(max-width:950px){.cards{grid-template-columns:repeat(3,1fr)}.kpi{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr 1fr}}
+@media(max-width:550px){.wrap{padding:11px}.top h1{font-size:24px}.cards{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.wide{grid-column:auto}.kpi{grid-template-columns:1fr 1fr}.big{font-size:19px}.result{font-size:21px}}
+</style></head>
+<body><div class="wrap">
+<header class="top"><h1>💰 Mon Budget Financier V4</h1><p>Entre tes chiffres : les calculs se mettent à jour automatiquement.</p></header>
+<nav>
+<button class="active" data-v="dashboard">📊 Accueil</button><button data-v="budget">💶 Budget</button><button data-v="simulation">🔮 Simulation</button><button data-v="goals">🎯 Épargne</button><button data-v="debts">💳 Crédits</button><button data-v="data">💾 Sauvegarde</button>
+</nav>
+
+<section id="dashboard" class="view active">
+<div class="cards">
+<div class="card"><div class="label">Revenus / mois</div><div id="income" class="big green">0 €</div></div>
+<div class="card"><div class="label">Charges / mois</div><div id="expenses" class="big red">0 €</div></div>
+<div class="card"><div class="label">Épargne / mois</div><div id="saving" class="big blue">0 €</div></div>
+<div class="card"><div class="label">Reste / mois</div><div id="left" class="big orange">0 €</div></div>
+<div class="card"><div class="label">Taux d'épargne</div><div id="rate" class="big">0 %</div></div>
+</div>
+<div id="status"></div>
+<div class="panel"><h2>🧮 Répartition de ton argent</h2><div class="kpi">
+<div class="box"><div class="label">Reste / semaine</div><div id="week" class="result">0 €</div><div class="hint">Reste mensuel ÷ 4,33</div></div>
+<div class="box"><div class="label">Reste / jour</div><div id="day" class="result">0 €</div><div class="hint">Reste mensuel ÷ 30,44</div></div>
+<div class="box"><div class="label">Charges annuelles</div><div id="annual" class="result">0 €</div><div class="hint">Charges × 12</div></div>
+<div class="box"><div class="label">Épargne annuelle</div><div id="annualSave" class="result">0 €</div><div class="hint">Épargne × 12</div></div>
+</div></div>
+<div class="panel"><h2>📈 Évolution prévue</h2><div id="projection"></div></div>
+<div class="panel"><h2>📊 Historique mensuel</h2><div id="chart" class="chart"></div></div>
+</section>
+
+<section id="budget" class="view">
+<div class="panel"><h2>➕ Ajouter une ligne au budget</h2><div class="form">
+<input id="name" class="wide" placeholder="Ex : Salaire, loyer, assurance...">
+<select id="type"><option value="income">Revenu</option><option value="expense">Dépense</option><option value="saving">Épargne</option></select>
+<input id="amount" type="number" min="0" step=".01" placeholder="Montant €">
+<select id="freq"><option value="monthly">Mensuel</option><option value="yearly">Annuel</option><option value="weekly">Hebdomadaire</option></select>
+<input id="cat" class="wide" placeholder="Catégorie : logement, voiture, courses...">
+<button class="primary" onclick="addItem()">Ajouter</button></div></div>
+<div class="panel"><h2>📋 Ton budget</h2><div class="tablewrap"><table class="table"><thead><tr><th>Nom</th><th>Catégorie</th><th>Type</th><th>Fréquence</th><th>Mensuel</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</section>
+
+<section id="simulation" class="view">
+<div class="panel"><h2>🔮 Simuler ton futur budget</h2><div class="form">
+<input id="si" type="number" min="0" step=".01" placeholder="Revenus mensuels">
+<input id="se" type="number" min="0" step=".01" placeholder="Dépenses mensuelles">
+<input id="ss" type="number" min="0" step=".01" placeholder="Épargne mensuelle">
+<input id="sm" type="number" min="1" max="120" value="12" placeholder="Mois">
+</div><p class="notice">Les valeurs actuelles sont préremplies. Modifie-les pour tester une augmentation de salaire, un nouveau crédit, une réduction de dépenses, etc.</p></div>
+<div class="panel"><h2>Résultats</h2><div id="sim"></div></div>
+</section>
+
+<section id="goals" class="view">
+<div class="panel"><h2>🎯 Nouvel objectif</h2><div class="form"><input id="gn" class="wide" placeholder="Ex : 10 000 € pour une voiture"><input id="gt" type="number" min="0" step=".01" placeholder="Objectif €"><input id="gc" type="number" min="0" step=".01" placeholder="Déjà épargné €"><button class="primary" onclick="addGoal()">Ajouter</button></div></div>
+<div class="panel"><h2>Mes objectifs</h2><div id="goals"></div></div>
+</section>
+
+<section id="debts" class="view">
+<div class="panel"><h2>💳 Nouveau crédit / dette</h2><div class="form"><input id="dn" class="wide" placeholder="Ex : Crédit voiture"><input id="di" type="number" min="0" step=".01" placeholder="Montant initial €"><input id="dr" type="number" min="0" step=".01" placeholder="Reste à payer €"><input id="dm" type="number" min="0" step=".01" placeholder="Mensualité €"><button class="primary" onclick="addDebt()">Ajouter</button></div></div>
+<div class="panel"><h2>Mes crédits</h2><div id="debts"></div></div>
+</section>
+
+<section id="data" class="view">
+<div class="panel"><h2>💾 Sauvegarder / restaurer</h2><p class="notice">Tes données sont stockées uniquement dans le navigateur de cet appareil. Fais une sauvegarde JSON si tu changes de téléphone ou de navigateur.</p><br><div class="actions"><button onclick="backup()">📥 Sauvegarder</button><button onclick="document.getElementById('file').click()">📤 Restaurer</button><button class="danger" onclick="resetAll()">🗑️ Tout supprimer</button></div><input id="file" type="file" accept=".json" style="display:none" onchange="restore(event)"></div>
+</section>
+</div>
+
+<script>
+const KEY="budgetV4";let D=JSON.parse(localStorage.getItem(KEY)||'{"items":[],"goals":[],"debts":[]}');
+const eur=n=>new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(n||0);
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const uid=()=>Date.now()+Math.random();const monthly=x=>x.freq==="yearly"?x.amount/12:x.freq==="weekly"?x.amount*52/12:x.amount;
+function save(){localStorage.setItem(KEY,JSON.stringify(D))}
+function totals(){let i=0,e=0,s=0;D.items.forEach(x=>{let m=monthly(x);if(x.type==="income")i+=m;if(x.type==="expense")e+=m;if(x.type==="saving")s+=m});return{i,e,s,left:i-e-s}}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.v).classList.add("active");render()});
+function addItem(){let n=name.value.trim(),a=+amount.value;if(!n||a<=0)return alert("Indique un nom et un montant.");D.items.push({id:uid(),name:n,type:type.value,amount:a,freq:freq.value,cat:cat.value.trim()});save();name.value=amount.value=cat.value="";render()}
+function delItem(id){D.items=D.items.filter(x=>x.id!==id);save();render()}
+function addGoal(){let n=gn.value.trim(),t=+gt.value,c=+gc.value||0;if(!n||t<=0)return alert("Indique un nom et un objectif.");D.goals.push({id:uid(),name:n,target:t,current:c});save();gn.value=gt.value=gc.value="";render()}
+function delGoal(id){D.goals=D.goals.filter(x=>x.id!==id);save();render()}
+function addDebt(){let n=dn.value.trim(),i=+di.value,r=+dr.value,m=+dm.value||0;if(!n||i<=0)return alert("Indique un nom et un montant initial.");D.debts.push({id:uid(),name:n,initial:i,remain:r,m});save();dn.value=di.value=dr.value=dm.value="";render()}
+function delDebt(id){D.debts=D.debts.filter(x=>x.id!==id);save();render()}
+function render(){
+let t=totals();income.textContent=eur(t.i);expenses.textContent=eur(t.e);saving.textContent=eur(t.s);left.textContent=eur(t.left);rate.textContent=t.i?(t.s/t.i*100).toFixed(1)+" %":"0 %";week.textContent=eur(t.left/4.33);day.textContent=eur(t.left/30.44);annual.textContent=eur(t.e*12);annualSave.textContent=eur(t.s*12);
+status.innerHTML=t.left>=0?`<div class="alert ok">🟢 Ton budget est positif. Il te reste <b>${eur(t.left)}</b> par mois après dépenses et épargne.</div>`:`<div class="alert bad">🔴 Attention : ton budget est négatif de <b>${eur(Math.abs(t.left))}</b> par mois. Il faut réduire les dépenses ou augmenter les revenus.</div>`;
+projection.innerHTML=`<div class="kpi"><div class="box"><div class="label">Dans 3 mois</div><div class="result">${eur(t.left*3)}</div></div><div class="box"><div class="label">Dans 6 mois</div><div class="result">${eur(t.left*6)}</div></div><div class="box"><div class="label">Dans 12 mois</div><div class="result">${eur(t.left*12)}</div></div><div class="box"><div class="label">Épargne à 12 mois</div><div class="result blue">${eur(t.s*12)}</div></div></div>`;
+rows.innerHTML=D.items.length?D.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.cat)}</td><td>${x.type==="income"?"Revenu":x.type==="expense"?"Dépense":"Épargne"}</td><td>${x.freq==="monthly"?"Mensuel":x.freq==="yearly"?"Annuel":"Hebdo"}</td><td>${eur(monthly(x))}</td><td><button class="mini" onclick="delItem(${x.id})">Suppr.</button></td></tr>`).join(""):'<tr><td colspan="6" class="empty">Aucune ligne.</td></tr>';
+goals.innerHTML=D.goals.length?D.goals.map(g=>{let p=Math.min(100,g.current/g.target*100);return `<div class="row"><div style="flex:1"><b>${esc(g.name)}</b><div class="sub">${eur(g.current)} / ${eur(g.target)} · reste ${eur(Math.max(0,g.target-g.current))}</div><div class="progress"><i style="width:${p}%"></i></div><div class="sub">${p.toFixed(0)} %</div></div><button class="mini" onclick="delGoal(${g.id})">Suppr.</button></div>`}).join(""):'<div class="empty">Aucun objectif.</div>';
+debts.innerHTML=D.debts.length?D.debts.map(d=>`<div class="row"><div><b>${esc(d.name)}</b><div class="sub">Initial : ${eur(d.initial)} · Reste : ${eur(d.remain)}${d.m?` · Mensualité : ${eur(d.m)}`:""}</div></div><button class="mini" onclick="delDebt(${d.id})">Suppr.</button></div>`).join(""):'<div class="empty">Aucun crédit.</div>';
+si.value=t.i.toFixed(2);se.value=t.e.toFixed(2);ss.value=t.s.toFixed(2);simulate();chartRender();
+}
+[si,se,ss,sm].forEach(x=>x.addEventListener("input",simulate));
+function simulate(){let i=+si.value||0,e=+se.value||0,s=+ss.value||0,m=Math.max(1,+sm.value||12),r=i-e-s;sim.innerHTML=`<div class="kpi"><div class="box"><div class="label">Reste chaque mois</div><div class="result ${r>=0?'green':'red'}">${eur(r)}</div></div><div class="box"><div class="label">Disponible / semaine</div><div class="result">${eur(r/4.33)}</div></div><div class="box"><div class="label">Sur ${m} mois</div><div class="result">${eur(r*m)}</div></div><div class="box"><div class="label">Épargne sur ${m} mois</div><div class="result blue">${eur(s*m)}</div></div></div>`}
+function chartRender(){let m={};D.items.forEach(x=>{let k=x.type==="income"?"i":x.type==="expense"?"e":"s";let now=new Date(),key=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");m[key]??={i:0,e:0,s:0};m[key][k]+=monthly(x)});let keys=Object.keys(m);let max=Math.max(1,...keys.flatMap(k=>Object.values(m[k])));chart.innerHTML=keys.length?keys.map(k=>{let d=m[k],h=v=>Math.max(2,v/max*195);return `<div class="month"><div class="bars"><i class="bar inc" style="height:${h(d.i)}px"></i><i class="bar exp" style="height:${h(d.e)}px"></i><i class="bar sav" style="height:${h(d.s)}px"></i></div><span>${k}</span></div>`}).join(""):'<div class="empty" style="width:100%">Ajoute ton budget pour commencer.</div>'}
+function backup(){let b=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="budget-financier-v4.json";a.click()}
+function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.items||!x.goals||!x.debts)throw 0;D=x;save();render();alert("Données restaurées.")}catch{alert("Sauvegarde invalide.")}};r.readAsText(f)}
+function resetAll(){if(confirm("Supprimer toutes les données ?")){D={items:[],goals:[],debts:[]};save();render()}}
+render();
+</script></body></html>
