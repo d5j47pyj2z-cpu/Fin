@@ -2,269 +2,162 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b1220">
-<title>Mon Budget Financier</title>
+<title>Mon Budget</title>
 <style>
-:root{--bg:#08111f;--panel:#111c2d;--panel2:#17263d;--line:#2b3c57;--text:#f8fafc;--muted:#94a3b8;--green:#22c55e;--red:#ef4444;--blue:#38bdf8;--orange:#f59e0b}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#07101c,#111827);color:var(--text);font:15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:1100px;margin:auto;padding:14px}.header{padding:8px 2px 15px}.header h1{margin:0;font-size:27px}.header p{margin:5px 0;color:var(--muted)}
-nav{display:flex;gap:7px;overflow:auto;margin-bottom:14px}button{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:10px;font-weight:700;cursor:pointer}button.primary{background:#2563eb;border-color:#2563eb}button.danger{background:#7f1d1d;border-color:#991b1b}button.small{padding:7px 9px;font-size:12px}
-.view{display:none}.view.active{display:block}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.card,.panel{background:rgba(17,28,45,.98);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:13px}.label{font-size:12px;color:var(--muted)}.big{font-size:21px;font-weight:900;margin-top:5px}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.orange{color:var(--orange)}
-h2{font-size:18px;margin:0 0 12px}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.wide{grid-column:span 2}input,select{width:100%;padding:11px;background:#091321;border:1px solid var(--line);border-radius:9px;color:var(--text);font-size:15px;outline:none}input:focus,select:focus{border-color:var(--blue)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.kpi{padding:13px;background:#0b1525;border:1px solid var(--line);border-radius:11px}.result{font-size:24px;font-weight:900;margin-top:5px}.hint{font-size:11px;color:var(--muted);margin-top:3px}
-.alert{padding:13px;border-radius:11px;margin-bottom:13px;font-weight:650}.ok{background:#06351e;border:1px solid #166534;color:#86efac}.bad{background:#3b0a0a;border:1px solid #991b1b;color:#fca5a5}.notice{padding:11px;border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:12px;line-height:1.5}
-.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;white-space:nowrap}.table th{color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:20px}
-.progress{height:10px;background:#091321;border-radius:20px;overflow:hidden;margin:7px 0}.progress span{display:block;height:100%;background:var(--blue)}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.sub{font-size:12px;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.sim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.chart{display:flex;align-items:flex-end;gap:10px;height:230px;overflow-x:auto;padding:10px 5px 25px;border-bottom:1px solid var(--line)}.month{height:100%;min-width:60px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.bars{height:185px;display:flex;align-items:flex-end;gap:3px}.bar{width:15px;min-height:2px;border-radius:4px 4px 0 0}.bar.i{background:var(--green)}.bar.e{background:var(--red)}.bar.s{background:var(--blue)}.month small{font-size:10px;color:var(--muted)}
-@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.kpis,.sim-grid{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.app{padding:10px}.header h1{font-size:24px}.cards{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.wide{grid-column:auto}.kpis,.sim-grid{grid-template-columns:1fr 1fr}.big{font-size:18px}.result{font-size:21px}}
+*{box-sizing:border-box}body{margin:0;background:#08111f;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:900px;margin:auto;padding:14px}.head{padding:8px 0 15px}.head h1{margin:0;font-size:27px}.head p{color:#94a3b8;margin:5px 0}
+nav{display:flex;gap:7px;overflow:auto;margin-bottom:14px}button{border:1px solid #30415c;background:#17263d;color:white;padding:11px 13px;border-radius:10px;font-weight:700}button.primary{background:#2563eb;border-color:#2563eb}button.red{background:#7f1d1d}.page{display:none}.page.active{display:block}.panel{background:#111d30;border:1px solid #2b3c57;border-radius:15px;padding:15px;margin-bottom:13px}h2{font-size:18px;margin:0 0 12px}.salary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.salary .full{grid-column:1/-1}label{font-size:12px;color:#94a3b8;display:block;margin-bottom:5px}input,select{width:100%;padding:12px;background:#091321;color:white;border:1px solid #30415c;border-radius:9px;font-size:16px}input:focus,select:focus{outline:2px solid #38bdf8}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.card{background:#111d30;border:1px solid #2b3c57;border-radius:13px;padding:13px}.small{font-size:12px;color:#94a3b8}.value{font-size:22px;font-weight:900;margin-top:4px}.green{color:#22c55e}.redtxt{color:#ef4444}.blue{color:#38bdf8}.orange{color:#f59e0b}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #2b3c57;padding:11px 0}.row:last-child{border:0}.empty{text-align:center;color:#94a3b8;padding:20px}.actions{display:flex;gap:7px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:12px}.alert{padding:12px;border-radius:10px;margin:10px 0;font-weight:650}.ok{background:#06351e;color:#86efac}.bad{background:#3b0a0a;color:#fca5a5}.hint{font-size:12px;color:#94a3b8;line-height:1.5}.progress{height:9px;background:#091321;border-radius:10px;overflow:hidden;margin:7px 0}.progress i{display:block;height:100%;background:#38bdf8}
+@media(max-width:650px){.cards{grid-template-columns:1fr 1fr}.salary{grid-template-columns:1fr}.salary .full{grid-column:auto}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="header"><h1>💰 Mon Budget Financier</h1><p>Ajoute tes revenus, dépenses et épargne. Les calculs se font automatiquement.</p></header>
+<div class="head"><h1>💰 Mon Budget</h1><p>Gestion simple de ton salaire, tes dépenses et ton épargne.</p></div>
 <nav>
-<button class="tab active" data-view="home">📊 Accueil</button>
-<button class="tab" data-view="budget">💶 Budget</button>
-<button class="tab" data-view="simulation">🔮 Simulation</button>
-<button class="tab" data-view="goals">🎯 Épargne</button>
-<button class="tab" data-view="debts">💳 Crédits</button>
-<button class="tab" data-view="data">💾 Données</button>
+<button class="tab active" data-page="accueil">📊 Accueil</button>
+<button class="tab" data-page="salaire">💰 Salaire</button>
+<button class="tab" data-page="depenses">💸 Dépenses</button>
+<button class="tab" data-page="epargne">🏦 Épargne</button>
+<button class="tab" data-page="simulation">🔮 Simulation</button>
+<button class="tab" data-page="donnees">💾 Données</button>
 </nav>
 
-<section id="home" class="view active">
+<section id="accueil" class="page active">
 <div class="cards">
-<div class="card"><div class="label">Revenus / mois</div><div id="vIncome" class="big green">0 €</div></div>
-<div class="card"><div class="label">Dépenses / mois</div><div id="vExpense" class="big red">0 €</div></div>
-<div class="card"><div class="label">Épargne / mois</div><div id="vSaving" class="big blue">0 €</div></div>
-<div class="card"><div class="label">Reste / mois</div><div id="vLeft" class="big orange">0 €</div></div>
-<div class="card"><div class="label">Taux d'épargne</div><div id="vRate" class="big">0 %</div></div>
+<div class="card"><div class="small">Salaire / revenus</div><div id="dashSalary" class="value green">0 €</div></div>
+<div class="card"><div class="small">Dépenses</div><div id="dashExpenses" class="value redtxt">0 €</div></div>
+<div class="card"><div class="small">Épargne</div><div id="dashSavings" class="value blue">0 €</div></div>
+<div class="card"><div class="small">Reste</div><div id="dashRemaining" class="value orange">0 €</div></div>
 </div>
-<div id="budgetAlert"></div>
-<div class="panel"><h2>🧮 Ton argent disponible</h2><div class="kpis">
-<div class="kpi"><div class="label">Par semaine</div><div id="vWeek" class="result">0 €</div><div class="hint">Reste ÷ 4,33</div></div>
-<div class="kpi"><div class="label">Par jour</div><div id="vDay" class="result">0 €</div><div class="hint">Reste ÷ 30,44</div></div>
-<div class="kpi"><div class="label">Dépenses / an</div><div id="vYearExpense" class="result">0 €</div></div>
-<div class="kpi"><div class="label">Épargne / an</div><div id="vYearSaving" class="result">0 €</div></div>
-</div></div>
+<div id="dashAlert"></div>
+<div class="panel"><h2>🧮 Répartition</h2>
+<div class="row"><span>Reste par semaine</span><b id="dashWeek">0 €</b></div>
+<div class="row"><span>Reste par jour</span><b id="dashDay">0 €</b></div>
+<div class="row"><span>Taux d'épargne</span><b id="dashRate">0 %</b></div>
+<div class="row"><span>Épargne possible sur 12 mois</span><b id="dashYearSave">0 €</b></div>
+</div>
 <div class="panel"><h2>📈 Projection</h2><div id="projection"></div></div>
-<div class="panel"><h2>📊 Budget actuel</h2><div id="chart" class="chart"></div><div class="hint">Vert = revenus · Rouge = dépenses · Bleu = épargne</div></div>
 </section>
 
-<section id="budget" class="view">
-<div class="panel"><h2>➕ Ajouter au budget</h2>
-<div class="form">
-<input id="itemName" class="wide" placeholder="Ex : Salaire, loyer, courses...">
-<select id="itemType"><option value="income">💰 Revenu</option><option value="expense">💸 Dépense</option><option value="saving">🏦 Épargne</option></select>
-<input id="itemAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Montant €">
-<select id="itemFreq"><option value="monthly">Chaque mois</option><option value="yearly">Chaque année</option><option value="weekly">Chaque semaine</option></select>
-<input id="itemCat" class="wide" placeholder="Catégorie (logement, voiture, courses...)">
-<button id="addItemBtn" class="primary">➕ Ajouter</button>
+<section id="salaire" class="page">
+<div class="panel">
+<h2>💰 Mon salaire</h2>
+<p class="hint">Entre ton salaire net mensuel. Le bouton ci-dessous enregistre directement le montant.</p>
+<div class="salary">
+<div class="full"><label for="salaryInput">Salaire net mensuel</label><input id="salaryInput" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex : 1800"></div>
+<button id="salaryAdd" class="primary">➕ Ajouter / enregistrer mon salaire</button>
+<button id="salaryDelete" class="red">🗑️ Supprimer le salaire</button>
+</div>
+<div id="salaryStatus" class="hint"></div>
+</div>
+</section>
+
+<section id="depenses" class="page">
+<div class="panel">
+<h2>💸 Ajouter une dépense</h2>
+<div class="salary">
+<div><label>Nom</label><input id="expenseName" placeholder="Ex : Loyer"></div>
+<div><label>Montant mensuel</label><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex : 600"></div>
+<div><label>Catégorie</label><input id="expenseCategory" placeholder="Ex : Logement"></div>
+<button id="expenseAdd" class="primary">➕ Ajouter la dépense</button>
+</div>
+</div>
+<div class="panel"><h2>📋 Mes dépenses</h2><div id="expenseList"></div></div>
+</section>
+
+<section id="epargne" class="page">
+<div class="panel">
+<h2>🏦 Épargne</h2>
+<div class="salary">
+<div><label>Nom</label><input id="savingName" placeholder="Ex : Épargne voiture"></div>
+<div><label>Montant mensuel</label><input id="savingAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex : 300"></div>
+<button id="savingAdd" class="primary">➕ Ajouter l'épargne</button>
+</div>
+</div>
+<div class="panel"><h2>Mes épargnes</h2><div id="savingList"></div></div>
+<div class="panel"><h2>🎯 Objectif</h2>
+<div class="salary">
+<div><label>Objectif total</label><input id="goalTarget" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex : 10000"></div>
+<div><label>Déjà épargné</label><input id="goalCurrent" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex : 1500"></div>
+<button id="goalSave" class="primary">💾 Enregistrer l'objectif</button>
+</div>
+<div id="goalDisplay"></div>
+</div>
+</section>
+
+<section id="simulation" class="page">
+<div class="panel"><h2>🔮 Simulation</h2>
+<p class="hint">Teste un autre salaire ou une autre dépense sans modifier ton budget réel.</p>
+<div class="salary">
+<div><label>Revenus / mois</label><input id="simIncome" type="number" step="0.01"></div>
+<div><label>Dépenses / mois</label><input id="simExpense" type="number" step="0.01"></div>
+<div><label>Épargne / mois</label><input id="simSaving" type="number" step="0.01"></div>
+<div><label>Nombre de mois</label><input id="simMonths" type="number" min="1" value="12"></div>
 </div></div>
-<div class="panel"><h2>📋 Mes lignes</h2><div class="table-wrap"><table class="table"><thead><tr><th>Nom</th><th>Catégorie</th><th>Type</th><th>Fréquence</th><th>Mensualisé</th><th>Actions</th></tr></thead><tbody id="itemRows"></tbody></table></div></div>
-</section>
-
-<section id="simulation" class="view">
-<div class="panel"><h2>🔮 Simulateur</h2><div class="form">
-<input id="simIncome" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Revenus / mois">
-<input id="simExpense" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Dépenses / mois">
-<input id="simSaving" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Épargne / mois">
-<input id="simMonths" type="number" min="1" max="120" value="12" inputmode="numeric" placeholder="Nombre de mois">
-</div><p class="notice">Modifie les chiffres ci-dessus pour tester une augmentation de salaire, une nouvelle dépense ou une épargne différente.</p></div>
 <div class="panel"><h2>Résultat</h2><div id="simResult"></div></div>
 </section>
 
-<section id="goals" class="view">
-<div class="panel"><h2>🎯 Ajouter un objectif</h2><div class="form">
-<input id="goalName" class="wide" placeholder="Ex : 10 000 € pour une voiture">
-<input id="goalTarget" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Objectif €">
-<input id="goalCurrent" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Déjà épargné €">
-<button id="addGoalBtn" class="primary">➕ Ajouter</button>
-</div></div>
-<div class="panel"><h2>Mes objectifs</h2><div id="goalList"></div></div>
-</section>
-
-<section id="debts" class="view">
-<div class="panel"><h2>💳 Ajouter un crédit / dette</h2><div class="form">
-<input id="debtName" class="wide" placeholder="Ex : Crédit voiture">
-<input id="debtInitial" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Montant initial €">
-<input id="debtRemain" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Reste à payer €">
-<input id="debtMonthly" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Mensualité €">
-<button id="addDebtBtn" class="primary">➕ Ajouter</button>
-</div></div>
-<div class="panel"><h2>Mes crédits</h2><div id="debtList"></div></div>
-</section>
-
-<section id="data" class="view">
-<div class="panel"><h2>💾 Sauvegarde</h2><p class="notice">Les données restent sur ton appareil. Utilise la sauvegarde avant de changer de téléphone ou de navigateur.</p><br>
-<div class="actions"><button id="backupBtn">📥 Sauvegarder</button><button id="restoreBtn">📤 Restaurer</button><button id="resetBtn" class="danger">🗑️ Tout supprimer</button></div>
-<input id="restoreFile" type="file" accept=".json" hidden>
+<section id="donnees" class="page">
+<div class="panel"><h2>💾 Mes données</h2><p class="hint">Tes données sont sauvegardées dans le navigateur de ton téléphone.</p>
+<div class="actions"><button id="backup">📥 Sauvegarder</button><button id="restore">📤 Restaurer</button><button id="reset" class="red">🗑️ Tout supprimer</button></div>
+<input id="file" type="file" accept=".json" hidden>
 </div></section>
 </div>
 
 <script>
 "use strict";
-const STORAGE_KEY="mon-budget-financier-v4-final";
-let state=loadState();
+var KEY="budget-simple-v5";
+var data=load();
 
 function $(id){return document.getElementById(id)}
-function euro(n){return new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(Number(n)||0)}
-function id(){return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)}
-function loadState(){
- try{
-  const x=JSON.parse(localStorage.getItem(STORAGE_KEY));
-  if(x&&Array.isArray(x.items)&&Array.isArray(x.goals)&&Array.isArray(x.debts)) return x;
- }catch(e){}
- return {items:[],goals:[],debts:[]};
-}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function monthly(item){
- const a=Number(item.amount)||0;
- if(item.freq==="yearly") return a/12;
- if(item.freq==="weekly") return a*52/12;
- return a;
-}
-function totals(){
- let income=0,expense=0,saving=0;
- state.items.forEach(x=>{
-  const m=monthly(x);
-  if(x.type==="income") income+=m;
-  else if(x.type==="expense") expense+=m;
-  else saving+=m;
- });
- return {income,expense,saving,left:income-expense-saving};
-}
-
-function addItem(){
- const name=$("itemName").value.trim();
- const amount=Number($("itemAmount").value);
- if(!name){alert("Ajoute un nom.");$("itemName").focus();return}
- if(!Number.isFinite(amount)||amount<=0){alert("Indique un montant supérieur à 0.");$("itemAmount").focus();return}
- state.items.push({
-  id:id(),name,type:$("itemType").value,amount,
-  freq:$("itemFreq").value,cat:$("itemCat").value.trim()
- });
- save();
- $("itemName").value="";$("itemAmount").value="";$("itemCat").value="";
- render();
- $("itemName").focus();
-}
-
-function editItem(itemId){
- const x=state.items.find(v=>v.id===itemId);if(!x)return;
- const n=prompt("Nom :",x.name);if(n===null)return;
- const a=prompt("Montant :",String(x.amount));if(a===null)return;
- const num=Number(a.replace(",","."));
- if(!n.trim()||!Number.isFinite(num)||num<=0){alert("Valeur incorrecte.");return}
- x.name=n.trim();x.amount=num;
- const f=prompt("Fréquence : mensuel / annuel / hebdo",x.freq==="monthly"?"mensuel":x.freq==="yearly"?"annuel":"hebdo");
- if(f!==null){
-  const q=f.toLowerCase();
-  if(q.startsWith("ann"))x.freq="yearly";else if(q.startsWith("heb"))x.freq="weekly";else x.freq="monthly";
- }
- save();render();
-}
-function deleteItem(itemId){if(confirm("Supprimer cette ligne ?")){state.items=state.items.filter(x=>x.id!==itemId);save();render()}}
-
-function addGoal(){
- const name=$("goalName").value.trim(),target=Number($("goalTarget").value),current=Number($("goalCurrent").value)||0;
- if(!name||!Number.isFinite(target)||target<=0){alert("Indique un objectif valide.");return}
- state.goals.push({id:id(),name,target,current:Math.max(0,current)});save();
- $("goalName").value="";$("goalTarget").value="";$("goalCurrent").value="";render();
-}
-function deleteGoal(i){if(confirm("Supprimer cet objectif ?")){state.goals=state.goals.filter(x=>x.id!==i);save();render()}}
-
-function addDebt(){
- const name=$("debtName").value.trim(),initial=Number($("debtInitial").value),remain=Number($("debtRemain").value),m=Number($("debtMonthly").value)||0;
- if(!name||!Number.isFinite(initial)||initial<=0){alert("Indique un crédit valide.");return}
- state.debts.push({id:id(),name,initial,remain:Math.max(0,remain||0),monthly:Math.max(0,m)});save();
- $("debtName").value="";$("debtInitial").value="";$("debtRemain").value="";$("debtMonthly").value="";render();
-}
-function deleteDebt(i){if(confirm("Supprimer ce crédit ?")){state.debts=state.debts.filter(x=>x.id!==i);save();render()}}
+function money(n){return new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(Number(n)||0)}
+function load(){try{var x=JSON.parse(localStorage.getItem(KEY));if(x&&typeof x.salary==="number"&&Array.isArray(x.expenses)&&Array.isArray(x.savings))return x}catch(e){}return{salary:0,expenses:[],savings:[],goal:{target:0,current:0}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function totalExpenses(){return data.expenses.reduce(function(s,x){return s+Number(x.amount||0)},0)}
+function totalSavings(){return data.savings.reduce(function(s,x){return s+Number(x.amount||0)},0)}
+function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
 
 function render(){
- const t=totals();
- $("vIncome").textContent=euro(t.income);$("vExpense").textContent=euro(t.expense);
- $("vSaving").textContent=euro(t.saving);$("vLeft").textContent=euro(t.left);
- $("vRate").textContent=t.income?(t.saving/t.income*100).toFixed(1)+" %":"0 %";
- $("vWeek").textContent=euro(t.left/4.33);$("vDay").textContent=euro(t.left/30.44);
- $("vYearExpense").textContent=euro(t.expense*12);$("vYearSaving").textContent=euro(t.saving*12);
-
- $("budgetAlert").innerHTML=t.left>=0
- ?`<div class="alert ok">🟢 Budget positif : il te reste <b>${euro(t.left)}</b> par mois après dépenses et épargne.</div>`
- :`<div class="alert bad">🔴 Budget négatif : il te manque <b>${euro(Math.abs(t.left))}</b> par mois. Réduis tes dépenses ou augmente tes revenus. </div>`;
-
- $("projection").innerHTML=`<div class="kpis">
- <div class="kpi"><div class="label">Dans 3 mois</div><div class="result">${euro(t.left*3)}</div></div>
- <div class="kpi"><div class="label">Dans 6 mois</div><div class="result">${euro(t.left*6)}</div></div>
- <div class="kpi"><div class="label">Dans 12 mois</div><div class="result">${euro(t.left*12)}</div></div>
- <div class="kpi"><div class="label">Épargne à 12 mois</div><div class="result blue">${euro(t.saving*12)}</div></div>
- </div>`;
-
- $("itemRows").innerHTML=state.items.length?state.items.map(x=>`<tr>
- <td>${esc(x.name)}</td><td>${esc(x.cat)}</td><td>${x.type==="income"?"Revenu":x.type==="expense"?"Dépense":"Épargne"}</td>
- <td>${x.freq==="monthly"?"Mensuel":x.freq==="yearly"?"Annuel":"Hebdo"}</td><td>${euro(monthly(x))}</td>
- <td><button class="small" onclick="editItem('${x.id}')">✏️</button> <button class="small" onclick="deleteItem('${x.id}')">🗑️</button></td></tr>`).join("")
- :' <tr><td colspan="6" class="empty">Aucune ligne. Ajoute ton premier revenu ou ta première dépense.</td></tr>';
-
- $("goalList").innerHTML=state.goals.length?state.goals.map(g=>{
-  const p=Math.min(100,g.current/g.target*100);
-  return `<div class="row"><div style="flex:1"><b>${esc(g.name)}</b><div class="sub">${euro(g.current)} / ${euro(g.target)} · reste ${euro(Math.max(0,g.target-g.current))}</div><div class="progress"><span style="width:${p}%"></span></div><div class="sub">${p.toFixed(0)} %</div></div><button class="small" onclick="deleteGoal('${g.id}')">🗑️</button></div>`
- }).join(""):'<div class="empty">Aucun objectif.</div>';
-
- $("debtList").innerHTML=state.debts.length?state.debts.map(d=>`<div class="row"><div><b>${esc(d.name)}</b><div class="sub">Initial : ${euro(d.initial)} · Reste : ${euro(d.remain)}${d.monthly?` · Mensualité : ${euro(d.monthly)}`:""}</div></div><button class="small" onclick="deleteDebt('${d.id}')">🗑️</button></div>`).join("")
- :' <div class="empty">Aucun crédit ou dette.</div>';
-
- $("simIncome").value=t.income.toFixed(2);$("simExpense").value=t.expense.toFixed(2);$("simSaving").value=t.saving.toFixed(2);
- simulate();drawChart();
+ var e=totalExpenses(),s=totalSavings(),r=data.salary-e-s;
+ $("dashSalary").textContent=money(data.salary);
+ $("dashExpenses").textContent=money(e);
+ $("dashSavings").textContent=money(s);
+ $("dashRemaining").textContent=money(r);
+ $("dashWeek").textContent=money(r/4.33);
+ $("dashDay").textContent=money(r/30.44);
+ $("dashRate").textContent=data.salary?((s/data.salary)*100).toFixed(1)+" %":"0 %";
+ $("dashYearSave").textContent=money(s*12);
+ $("dashAlert").innerHTML=r>=0?'<div class="alert ok">🟢 Ton budget est positif. Il te reste <b>'+money(r)+'</b> par mois.</div>':'<div class="alert bad">🔴 Ton budget est négatif de <b>'+money(Math.abs(r))+'</b> par mois.</div>';
+ $("salaryInput").value=data.salary||"";
+ $("salaryStatus").textContent=data.salary?"Salaire enregistré : "+money(data.salary)+" net / mois":"Aucun salaire enregistré.";
+ $("expenseList").innerHTML=data.expenses.length?data.expenses.map(function(x){return '<div class="row"><div><b>'+esc(x.name)+'</b><div class="sub">'+esc(x.category)+' · '+money(x.amount)+' / mois</div></div><div><button class="mini" onclick="editExpense(\''+x.id+'\')">✏️</button> <button class="mini" onclick="deleteExpense(\''+x.id+'\')">🗑️</button></div></div>'}).join(""):'<div class="empty">Aucune dépense ajoutée.</div>';
+ $("savingList").innerHTML=data.savings.length?data.savings.map(function(x){return '<div class="row"><div><b>'+esc(x.name)+'</b><div class="sub">'+money(x.amount)+' / mois</div></div><button class="mini" onclick="deleteSaving(\''+x.id+'\')">🗑️</button></div>'}).join(""):'<div class="empty">Aucune épargne ajoutée.</div>';
+ var g=data.goal||{target:0,current:0};var p=g.target?Math.min(100,g.current/g.target*100):0;
+ $("goalDisplay").innerHTML=g.target?'<div class="row"><div style="flex:1"><b>'+money(g.current)+' / '+money(g.target)+'</b><div class="progress"><i style="width:'+p+'%"></i></div><div class="sub">'+p.toFixed(0)+' % · reste '+money(Math.max(0,g.target-g.current))+'</div></div></div>':'<div class="empty">Aucun objectif enregistré.</div>';
+ $("projection").innerHTML='<div class="row"><span>Dans 3 mois</span><b>'+money(r*3)+'</b></div><div class="row"><span>Dans 6 mois</span><b>'+money(r*6)+'</b></div><div class="row"><span>Dans 12 mois</span><b>'+money(r*12)+'</b></div><div class="row"><span>Épargne accumulée en 12 mois</span><b class="blue">'+money(s*12)+'</b></div>';
+ $("simIncome").value=data.salary||0;$("simExpense").value=e;$("simSaving").value=s;simulate();
 }
-function simulate(){
- const i=Number($("simIncome").value)||0,e=Number($("simExpense").value)||0,s=Number($("simSaving").value)||0,m=Math.max(1,Number($("simMonths").value)||12),r=i-e-s;
- $("simResult").innerHTML=`<div class="sim-grid">
- <div class="kpi"><div class="label">Reste / mois</div><div class="result ${r>=0?"green":"red"}">${euro(r)}</div></div>
- <div class="kpi"><div class="label">Reste / semaine</div><div class="result">${euro(r/4.33)}</div></div>
- <div class="kpi"><div class="label">Reste sur ${m} mois</div><div class="result">${euro(r*m)}</div></div>
- <div class="kpi"><div class="label">Épargne sur ${m} mois</div><div class="result blue">${euro(s*m)}</div></div>
- </div>`;
-}
-function drawChart(){
- const months=[],now=new Date();
- for(let n=11;n>=0;n--){const d=new Date(now.getFullYear(),now.getMonth()-n,1);months.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))}
- const t=totals(),max=Math.max(1,t.income,t.expense,t.saving);
- $("chart").innerHTML=months.map(k=>`<div class="month"><div class="bars">
- <i class="bar i" style="height:${Math.max(2,t.income/max*175)}px"></i>
- <i class="bar e" style="height:${Math.max(2,t.expense/max*175)}px"></i>
- <i class="bar s" style="height:${Math.max(2,t.saving/max*175)}px"></i>
- </div><small>${k}</small></div>`).join("");
-}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function backup(){
- const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
- const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mon-budget-financier.json";a.click();URL.revokeObjectURL(a.href);
-}
-function restore(file){
- if(!file)return;const reader=new FileReader();
- reader.onload=()=>{try{const x=JSON.parse(reader.result);if(!x||!Array.isArray(x.items)||!Array.isArray(x.goals)||!Array.isArray(x.debts))throw Error();
- state=x;save();render();alert("Sauvegarde restaurée avec succès.")}catch(e){alert("Le fichier de sauvegarde est invalide.")}};
- reader.readAsText(file);
-}
-function resetAll(){if(confirm("Supprimer toutes les données ? Cette action est irréversible.")){state={items:[],goals:[],debts:[]};save();render()}}
-
-document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
- document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(btn.dataset.view).classList.add("active");
-}));
-$("addItemBtn").addEventListener("click",addItem);
-$("addGoalBtn").addEventListener("click",addGoal);
-$("addDebtBtn").addEventListener("click",addDebt);
-$("backupBtn").addEventListener("click",backup);
-$("restoreBtn").addEventListener("click",()=>$("restoreFile").click());
-$("restoreFile").addEventListener("change",e=>restore(e.target.files[0]));
-$("resetBtn").addEventListener("click",resetAll);
-["simIncome","simExpense","simSaving","simMonths"].forEach(x=>$(x).addEventListener("input",simulate));
-$("itemAmount").addEventListener("keydown",e=>{if(e.key==="Enter")addItem()});
-$("itemName").addEventListener("keydown",e=>{if(e.key==="Enter")addItem()});
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function addSalary(){var v=Number($("salaryInput").value);if(!Number.isFinite(v)||v<=0){alert("Entre un salaire supérieur à 0.");return}data.salary=v;save();render();alert("Salaire enregistré : "+money(v)+" par mois.")}
+function deleteSalary(){if(confirm("Supprimer le salaire ?")){data.salary=0;save();render()}}
+function addExpense(){var n=$("expenseName").value.trim(),a=Number($("expenseAmount").value),c=$("expenseCategory").value.trim();if(!n||!Number.isFinite(a)||a<=0){alert("Entre un nom et un montant.");return}data.expenses.push({id:uid(),name:n,amount:a,category:c});save();$("expenseName").value="";$("expenseAmount").value="";$("expenseCategory").value="";render()}
+function editExpense(i){var x=data.expenses.find(function(v){return v.id===i});if(!x)return;var n=prompt("Nom",x.name);if(n===null)return;var a=prompt("Montant mensuel",x.amount);if(a===null)return;var v=Number(a.replace(",","."));if(!n.trim()||!Number.isFinite(v)||v<=0){alert("Valeur incorrecte.");return}x.name=n.trim();x.amount=v;save();render()}
+function deleteExpense(i){if(confirm("Supprimer cette dépense ?")){data.expenses=data.expenses.filter(function(x){return x.id!==i});save();render()}}
+function addSaving(){var n=$("savingName").value.trim(),a=Number($("savingAmount").value);if(!n||!Number.isFinite(a)||a<=0){alert("Entre un nom et un montant.");return}data.savings.push({id:uid(),name:n,amount:a});save();$("savingName").value="";$("savingAmount").value="";render()}
+function deleteSaving(i){if(confirm("Supprimer cette épargne ?")){data.savings=data.savings.filter(function(x){return x.id!==i});save();render()}}
+function saveGoal(){var t=Number($("goalTarget").value),c=Number($("goalCurrent").value)||0;if(!Number.isFinite(t)||t<=0){alert("Entre un objectif supérieur à 0.");return}data.goal={target:t,current:Math.max(0,c)};save();render()}
+function simulate(){var i=Number($("simIncome").value)||0,e=Number($("simExpense").value)||0,s=Number($("simSaving").value)||0,m=Math.max(1,Number($("simMonths").value)||12),r=i-e-s;$("simResult").innerHTML='<div class="cards"><div class="card"><div class="small">Reste / mois</div><div class="value '+(r>=0?"green":"redtxt")+'">'+money(r)+'</div></div><div class="card"><div class="small">Reste / semaine</div><div class="value">'+money(r/4.33)+'</div></div><div class="card"><div class="small">Reste sur '+m+' mois</div><div class="value">'+money(r*m)+'</div></div><div class="card"><div class="small">Épargne sur '+m+' mois</div><div class="value blue">'+money(s*m)+'</div></div></div>'}
+function backup(){var b=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="mon-budget-sauvegarde.json";a.click()}
+function restore(){ $("file").click() }
+$("file").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var x=JSON.parse(r.result);if(typeof x.salary!=="number"||!Array.isArray(x.expenses)||!Array.isArray(x.savings))throw 0;data=x;save();render();alert("Sauvegarde restaurée.")}catch(err){alert("Fichier invalide.")}};r.readAsText(f)})
+function reset(){if(confirm("Supprimer toutes les données ?")){data={salary:0,expenses:[],savings:[],goal:{target:0,current:0}};save();render()}}
+document.querySelectorAll(".tab").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});b.classList.add("active");document.querySelectorAll(".page").forEach(function(x){x.classList.remove("active")});$(b.dataset.page).classList.add("active")})})
+$("salaryAdd").addEventListener("click",addSalary);$("salaryDelete").addEventListener("click",deleteSalary);$("expenseAdd").addEventListener("click",addExpense);$("savingAdd").addEventListener("click",addSaving);$("goalSave").addEventListener("click",saveGoal);$("backup").addEventListener("click",backup);$("restore").addEventListener("click",restore);$("reset").addEventListener("click",reset);
+["simIncome","simExpense","simSaving","simMonths"].forEach(function(x){$(x).addEventListener("input",simulate)})
+$("salaryInput").addEventListener("keydown",function(e){if(e.key==="Enter")addSalary()})
 render();
 </script>
-</body></html>
+</body>
+</html>

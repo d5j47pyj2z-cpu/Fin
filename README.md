@@ -1,20 +1,18 @@
-# Mon Budget Financier V4 — version corrigée
+# Mon Budget V5
 
-Application web mobile pour gérer un budget personnel.
+Version simplifiée et robuste pour mobile.
 
-## Fonctionnalités
-- Ajouter revenus, dépenses et épargne
-- Modifier ou supprimer chaque ligne
-- Fréquence mensuelle, annuelle ou hebdomadaire
-- Calcul automatique du budget mensuel
-- Reste par mois, semaine et jour
+- Salaire net mensuel avec bouton dédié
+- Dépenses mensuelles
+- Épargne mensuelle
+- Reste à vivre
+- Calcul semaine/jour
 - Taux d'épargne
-- Projection à 3, 6 et 12 mois
-- Simulateur modifiable en temps réel
-- Objectifs d'épargne
-- Crédits et dettes
-- Sauvegarde/restauration JSON
-- Fonctionne sur iPhone et sans serveur
+- Projections
+- Simulation
+- Objectif d'épargne
+- Sauvegarde/restauration
+- Modification et suppression des dépenses
+- Stockage local du navigateur
 
-## GitHub Pages
-Mettre `index.html` à la racine du dépôt puis activer GitHub Pages sur la branche `main`, dossier `/root`.
+GitHub Pages : déposer `index.html` à la racine du dépôt puis activer Pages sur `main` / `/root`.
